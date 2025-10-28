@@ -4,7 +4,7 @@ namespace Job_Tracker_Api.Model.Entities
     public class Application
     {
         public int Id { get; set; }
-        //public int User_Id { get; set; }
+        public User User { get; set; }
         public string Title { get; set; }
         public string Company_Name { get; set; }
         public DateTime Date { get; set; }

@@ -15,5 +15,6 @@ namespace Job_Tracker_Api.Model.Entities
         [Required(ErrorMessage = "Email is Required")]
         public string Email { get; set; }
         public bool IsDeleted { get; set; }
+        public List<Application> Applications { get; set; }
     }
 }
