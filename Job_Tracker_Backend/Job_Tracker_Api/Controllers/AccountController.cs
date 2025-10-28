@@ -17,5 +17,11 @@ namespace Job_Tracker_Api.Controllers
         {
             return await this.accountService.Login(loginDTO);
         }
+
+        [HttpPost("/CreateAccount")]
+        public async Task<string> CreateAccount(AccountDTO accountDTO)
+        {
+            return await this.accountService.CreateAccount(accountDTO);
+        }
     }
 }
