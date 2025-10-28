@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Job_Tracker_Api.Controllers.Repositories;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System.Net;
 
 namespace Job_Tracker_Api.Controllers.Services.ServicesImpl
 {
@@ -28,16 +29,7 @@ namespace Job_Tracker_Api.Controllers.Services.ServicesImpl
                 return "Success!";
             } else
             {//A user already exists with that username or email
-                if(existingUserResult.Value.Email == accountDTO.Email)
-                {
-                    return "Email already in use!";
-                } else if(existingUserResult.Value.Username == accountDTO.Username)
-                {
-                    return "Username already in use!";
-                } else
-                {
-                    return "Unknown Error!";
-                }
+                return "Username or email already in use";
             }
             
         }
@@ -60,7 +52,7 @@ namespace Job_Tracker_Api.Controllers.Services.ServicesImpl
             else
             {
                 //Unsuccessful login/bad credentials
-                return result2;
+                return null;
             }
         }
         

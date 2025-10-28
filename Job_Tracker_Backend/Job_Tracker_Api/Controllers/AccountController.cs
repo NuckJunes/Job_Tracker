@@ -4,6 +4,7 @@ using Job_Tracker_Api.Controllers.Services;
 
 namespace Job_Tracker_Api.Controllers
 {
+    [ApiController]
     public class AccountController : ControllerBase
     {
         public IAccountService accountService { get; set; }
@@ -15,7 +16,14 @@ namespace Job_Tracker_Api.Controllers
         [HttpPost("/login")]
         public async Task<ActionResult<List<ApplicationReturnDTO>>> Login(LoginDTO loginDTO)
         {
-            return await this.accountService.Login(loginDTO);
+            ActionResult<List<ApplicationReturnDTO>> result = await this.accountService.Login(loginDTO);
+            if(result == null)
+            {
+                return Unauthorized();
+            } else
+            {
+                return result;
+            }
         }
 
         [HttpPost("/CreateAccount")]
