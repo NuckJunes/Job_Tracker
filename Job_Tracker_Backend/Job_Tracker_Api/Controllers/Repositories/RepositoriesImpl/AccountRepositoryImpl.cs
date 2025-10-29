@@ -39,5 +39,10 @@ namespace Job_Tracker_Api.Controllers.Repositories.RepositoriesImpl
         {
             return await appDbContext.Users.FirstOrDefaultAsync(u => (u.Username == accountDTO.Username && u.Email == accountDTO.Email));
         }
+
+        public async Task<ActionResult<User>> getUserById(int id)
+        {
+            return await appDbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+        }
     }
 }

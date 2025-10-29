@@ -8,5 +8,6 @@ namespace Job_Tracker_Api.Controllers.Repositories
     {
         Task<ActionResult<string>> createAccount(User newUser);
         Task<ActionResult<User>> getUser(AccountDTO accountDTO);
+        Task<ActionResult<User>> getUserById(int id);
     }
 }
