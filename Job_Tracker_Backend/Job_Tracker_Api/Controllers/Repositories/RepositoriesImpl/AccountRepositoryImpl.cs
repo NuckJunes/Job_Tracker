@@ -1,4 +1,8 @@
 using Job_Tracker_Api.Data;
+using Job_Tracker_Api.Model.DTOs;
+using Job_Tracker_Api.Model.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Job_Tracker_Api.Controllers.Repositories.RepositoriesImpl
 {
@@ -9,6 +13,31 @@ namespace Job_Tracker_Api.Controllers.Repositories.RepositoriesImpl
         public AccountRepositoryImpl(ApplicationDbContext appDbContext)
         {
             this.appDbContext = appDbContext;
+        }
+
+        public async Task<ActionResult<string>> createAccount(User newUser)
+        {
+            User found = await appDbContext.Users.FirstOrDefaultAsync(u => (u.Username == newUser.Username && u.Email == newUser.Email));
+            if(found == null)
+            {
+                appDbContext.Users.Add(newUser);
+                await appDbContext.SaveChangesAsync();
+                return new ActionResult<string>("Success!");
+            } else
+            {
+                if (found.Email == newUser.Email)
+                {
+                    return new ActionResult<string>("Email");
+                } else
+                {
+                    return new ActionResult<string>("Username");
+                }
+            }
+        }
+
+        public async Task<ActionResult<User>> getUser(AccountDTO accountDTO)
+        {
+            return await appDbContext.Users.FirstOrDefaultAsync(u => (u.Username == accountDTO.Username && u.Email == accountDTO.Email));
         }
     }
 }

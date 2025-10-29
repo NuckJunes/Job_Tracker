@@ -14,9 +14,9 @@ namespace Job_Tracker_Api.Controllers
         }
 
         [HttpPost("/login")]
-        public async Task<ActionResult<List<ApplicationReturnDTO>>> Login(LoginDTO loginDTO)
+        public async Task<ActionResult<List<ApplicationReturnDTO>>> Login(AccountDTO accountDTO)
         {
-            ActionResult<List<ApplicationReturnDTO>> result = await this.accountService.Login(loginDTO);
+            ActionResult<List<ApplicationReturnDTO>> result = await this.accountService.Login(accountDTO);
             if(result == null)
             {
                 return Unauthorized();

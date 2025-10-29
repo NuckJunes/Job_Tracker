@@ -20,25 +20,37 @@ namespace Job_Tracker_Api.Controllers.Services.ServicesImpl
         public async Task<string> CreateAccount(AccountDTO accountDTO)
         {
             //Check if the account email/username already exists, if so, return
-            ActionResult<User> existingUserResult = await accountRepository.getUser(accountDTO);
-            if(existingUserResult.Value == null)
-            { //No existing user, create a new account
-                User newUser = new User();
-                newUser.convertAccountDTOtoUser(accountDTO, SaltAndHash(accountDTO.Password));
-                ActionResult<string> createResult = await accountRepository.createAccount(newUser);
-                return "Success!";
+            User newUser = new User();
+            newUser.convertAccountDTOtoUser(accountDTO, SaltAndHash(accountDTO.Password));
+            ActionResult<string> createResult = await accountRepository.createAccount(newUser);
+            if(createResult.Value == "Email")
+            {
+                return "Email already in use!";
+            } else if(createResult.Value == "Username")
+            {
+                return "Username already in use!";
             } else
-            {//A user already exists with that username or email
-                return "Username or email already in use";
-            }
-            
+            {
+                return "Success!";
+            }            
         }
 
-        public async Task<ActionResult<List<ApplicationReturnDTO>>> Login(LoginDTO loginDTO)
+        public async Task<ActionResult<List<ApplicationReturnDTO>>> Login(AccountDTO accountDTO)
         {
-            ActionResult<User> result = await accountRepository.getUser(loginDTO);
+            if (accountDTO.Email == null) //If I decide to not require email to login
+            {
+                accountDTO.Email = "";
+            }
+
+            if (accountDTO.Username == null) //If I decide to not require username to login
+            {
+                accountDTO.Username = "";
+            }
+            
+            ActionResult<User> result = await accountRepository.getUser(accountDTO);
             ActionResult<List<ApplicationReturnDTO>> result2 = new ActionResult<List<ApplicationReturnDTO>>(new List<ApplicationReturnDTO>());
-            if (result.Value != null)
+            string hashedLogin = SaltAndHash(accountDTO.Password);
+            if (result.Value != null && result.Value.Password == hashedLogin)
             {
                 //Successful login, convert applications to applicationreturnDtos
                 foreach (var app in result.Value.Applications)
