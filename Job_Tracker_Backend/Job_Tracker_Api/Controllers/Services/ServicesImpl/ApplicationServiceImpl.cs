@@ -25,12 +25,18 @@ namespace Job_Tracker_Api.Controllers.Services.ServicesImpl
                 return new ActionResult<ApplicationReturnDTO>(new ApplicationReturnDTO());
             }
             newApp.convertApplicationDTOtoApplication(applicationDTO, existingUser.Value);
-            return await applicationRepository.addApplication(newApp);
+            ActionResult<Application> appReturned = await applicationRepository.addApplication(newApp);
+            ApplicationReturnDTO appToReturn = new ApplicationReturnDTO();
+            appToReturn.ApplicationToDTO(appReturned.Value);
+            return new ActionResult<ApplicationReturnDTO>(appToReturn);
         }
 
         public async Task<ActionResult<ApplicationReturnDTO>> deleteApplication(int id)
         {
-            return await applicationRepository.deleteApplication(id);
+            ActionResult<Application> deletedApp = await applicationRepository.deleteApplication(id);
+            ApplicationReturnDTO a = new ApplicationReturnDTO();
+            a.ApplicationToDTO(deletedApp.Value);
+            return new ActionResult<ApplicationReturnDTO>(a);
         }
 
         public async Task<ActionResult<ApplicationReturnDTO>> editApplication(ApplicationDTO applicationDTO, int id)
