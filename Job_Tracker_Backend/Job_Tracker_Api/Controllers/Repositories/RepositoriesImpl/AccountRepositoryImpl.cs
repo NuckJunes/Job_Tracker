@@ -17,7 +17,7 @@ namespace Job_Tracker_Api.Controllers.Repositories.RepositoriesImpl
 
         public async Task<ActionResult<string>> createAccount(User newUser)
         {
-            User found = await appDbContext.Users.FirstOrDefaultAsync(u => (u.Username == newUser.Username && u.Email == newUser.Email));
+            User found = await appDbContext.Users.FirstOrDefaultAsync(u => (u.Username == newUser.Username || u.Email == newUser.Email));
             if(found == null)
             {
                 appDbContext.Users.Add(newUser);

@@ -5,23 +5,26 @@ using Job_Tracker_Api.Controllers.Repositories;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Net;
+using Microsoft.AspNetCore.Identity;
 
 namespace Job_Tracker_Api.Controllers.Services.ServicesImpl
 {
     public class AccountServiceImpl : IAccountService
     {
         public IAccountRepository accountRepository;
+        private readonly IPasswordHasher<User> passwordHasher;
 
-        public AccountServiceImpl(IAccountRepository accountRepository)
+        public AccountServiceImpl(IAccountRepository accountRepository, IPasswordHasher<User> passwordHasher)
         {
             this.accountRepository = accountRepository;
+            this.passwordHasher = passwordHasher;
         }
 
         public async Task<string> CreateAccount(AccountDTO accountDTO)
         {
             //Check if the account email/username already exists, if so, return
             User newUser = new User();
-            newUser.convertAccountDTOtoUser(accountDTO, SaltAndHash(accountDTO.Password));
+            newUser.convertAccountDTOtoUser(accountDTO, SaltAndHash(accountDTO.Password, newUser));
             ActionResult<string> createResult = await accountRepository.createAccount(newUser);
             if(createResult.Value == "Email")
             {
@@ -49,15 +52,23 @@ namespace Job_Tracker_Api.Controllers.Services.ServicesImpl
             
             ActionResult<User> result = await accountRepository.getUser(accountDTO);
             ActionResult<List<ApplicationReturnDTO>> result2 = new ActionResult<List<ApplicationReturnDTO>>(new List<ApplicationReturnDTO>());
-            string hashedLogin = SaltAndHash(accountDTO.Password);
-            if (result.Value != null && result.Value.Password == hashedLogin)
+            if (result.Value != null)
             {
-                //Successful login, convert applications to applicationreturnDtos
-                foreach (var app in result.Value.Applications)
+                PasswordVerificationResult passwordResult = passwordHasher.VerifyHashedPassword(result.Value, result.Value.Password, accountDTO.Password);
+                if (passwordResult != PasswordVerificationResult.Success)
                 {
-                    ApplicationReturnDTO newReturn = new ApplicationReturnDTO();
-                    newReturn.ApplicationToDTO(app);
-                    result2.Value.Add(newReturn);
+                    return null;
+                }
+                
+                //Successful login, convert applications to applicationreturnDtos
+                if(result.Value.Applications != null)
+                {
+                    foreach (var app in result.Value.Applications)
+                    {
+                        ApplicationReturnDTO newReturn = new ApplicationReturnDTO();
+                        newReturn.ApplicationToDTO(app);
+                        result2.Value.Add(newReturn);
+                    }
                 }
                 return result2;
             }
@@ -68,16 +79,9 @@ namespace Job_Tracker_Api.Controllers.Services.ServicesImpl
             }
         }
         
-        private string SaltAndHash(string password)
+        private string SaltAndHash(string password, User user)
         {
-            byte[] salt = RandomNumberGenerator.GetBytes(128 / 8);
-            string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password: password,
-                salt: salt,
-                prf: KeyDerivationPrf.HMACSHA256,
-                iterationCount: 100000,
-                numBytesRequested: 256 / 8));
-            return hashed;
+            return passwordHasher.HashPassword(user, password);
         }
     }
 }

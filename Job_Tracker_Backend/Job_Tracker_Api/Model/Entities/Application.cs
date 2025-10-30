@@ -33,7 +33,6 @@ namespace Job_Tracker_Api.Model.Entities
             this.Location = appDTO.Location;
             this.Status = appDTO.Status;
             this.Company_Name = appDTO.Company_Name;
-            this.Date = appDTO.Date;
             this.Title = appDTO.Title;
             this.Details = appDTO.Details;
         }
