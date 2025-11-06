@@ -1,0 +1,25 @@
+.title {
+    background-color: #6985b3;
+    border-radius: 15px;
+    width: 50%;
+    text-align: center;
+    margin: auto;
+}
+
+.col-sm-12 {
+    color: white;
+    text-align: center;
+    margin: auto;
+    padding: 10px;
+}
+
+.row {
+    margin: auto;
+    padding: 10px;
+}
+
+.account-text {
+    padding-top: 10px;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
