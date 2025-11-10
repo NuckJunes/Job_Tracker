@@ -17,7 +17,7 @@ namespace Job_Tracker_Api.Controllers.Repositories.RepositoriesImpl
 
         public async Task<ActionResult<string>> createAccount(User newUser)
         {
-            User found = await appDbContext.Users.FirstOrDefaultAsync(u => (u.Username == newUser.Username || u.Email == newUser.Email));
+            User found = await appDbContext.Users.FirstOrDefaultAsync(u => (u.UserName == newUser.UserName || u.Email == newUser.Email));
             if(found == null)
             {
                 appDbContext.Users.Add(newUser);
@@ -37,12 +37,12 @@ namespace Job_Tracker_Api.Controllers.Repositories.RepositoriesImpl
 
         public async Task<ActionResult<User>> getUser(AccountDTO accountDTO)
         {
-            return await appDbContext.Users.FirstOrDefaultAsync(u => (u.Username == accountDTO.Username && u.Email == accountDTO.Email));
+            return await appDbContext.Users.FirstOrDefaultAsync(u => (u.UserName == accountDTO.Username && u.Email == accountDTO.Email));
         }
 
-        public async Task<ActionResult<User>> getUserById(int id)
+        public async Task<ActionResult<User>> getUserById(string id)
         {
-            return await appDbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+            return await appDbContext.Users.FirstOrDefaultAsync(u => u.Id.Equals(id));
         }
     }
 }

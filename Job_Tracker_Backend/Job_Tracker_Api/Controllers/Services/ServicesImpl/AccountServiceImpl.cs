@@ -54,7 +54,7 @@ namespace Job_Tracker_Api.Controllers.Services.ServicesImpl
             ActionResult<List<ApplicationReturnDTO>> result2 = new ActionResult<List<ApplicationReturnDTO>>(new List<ApplicationReturnDTO>());
             if (result.Value != null)
             {
-                PasswordVerificationResult passwordResult = passwordHasher.VerifyHashedPassword(result.Value, result.Value.Password, accountDTO.Password);
+                PasswordVerificationResult passwordResult = passwordHasher.VerifyHashedPassword(result.Value, result.Value.PasswordHash, accountDTO.Password);
                 if (passwordResult != PasswordVerificationResult.Success)
                 {
                     return null;

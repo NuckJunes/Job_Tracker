@@ -15,7 +15,7 @@ namespace Job_Tracker_Api.Controllers.Services.ServicesImpl
             this.accountRepository = accountRepository;
         }
 
-        public async Task<ActionResult<ApplicationReturnDTO>> addApplication(ApplicationDTO applicationDTO, int id)
+        public async Task<ActionResult<ApplicationReturnDTO>> addApplication(ApplicationDTO applicationDTO, string id)
         {
             Application newApp = new Application();
             ActionResult<User> existingUser = await accountRepository.getUserById(id);
@@ -31,7 +31,7 @@ namespace Job_Tracker_Api.Controllers.Services.ServicesImpl
             return new ActionResult<ApplicationReturnDTO>(appToReturn);
         }
 
-        public async Task<ActionResult<ApplicationReturnDTO>> deleteApplication(int id)
+        public async Task<ActionResult<ApplicationReturnDTO>> deleteApplication(string id)
         {
             ActionResult<Application> deletedApp = await applicationRepository.deleteApplication(id);
             ApplicationReturnDTO a = new ApplicationReturnDTO();
@@ -39,7 +39,7 @@ namespace Job_Tracker_Api.Controllers.Services.ServicesImpl
             return new ActionResult<ApplicationReturnDTO>(a);
         }
 
-        public async Task<ActionResult<ApplicationReturnDTO>> editApplication(ApplicationDTO applicationDTO, int id)
+        public async Task<ActionResult<ApplicationReturnDTO>> editApplication(ApplicationDTO applicationDTO, string id)
         {
             ActionResult<Application> existingApp = await applicationRepository.getAppById(id);
             existingApp.Value.updateApplication(applicationDTO);

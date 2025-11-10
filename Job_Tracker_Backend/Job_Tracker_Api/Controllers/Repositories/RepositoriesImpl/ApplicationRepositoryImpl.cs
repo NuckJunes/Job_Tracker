@@ -22,17 +22,17 @@ namespace Job_Tracker_Api.Controllers.Repositories.RepositoriesImpl
             return newApp;
         }
 
-        public async Task<ActionResult<Application>> deleteApplication(int id)
+        public async Task<ActionResult<Application>> deleteApplication(string id)
         {
-            Application appToDelete = appDbContext.Applications.FirstOrDefault(a => a.Id == id);
+            Application appToDelete = appDbContext.Applications.FirstOrDefault(a => a.Id.Equals(id));
             appDbContext.Applications.Remove(appToDelete);
             await appDbContext.SaveChangesAsync();
             return new ActionResult<Application>(appToDelete);
         }
 
-        public async Task<ActionResult<Application>> getAppById(int id)
+        public async Task<ActionResult<Application>> getAppById(string id)
         {
-            return await this.appDbContext.Applications.FirstOrDefaultAsync(a => a.Id == id);
+            return await this.appDbContext.Applications.FirstOrDefaultAsync(a => a.Id.Equals(id));
         }
 
         public async Task<ActionResult<Application>> updateApplication(Application value)

@@ -14,19 +14,19 @@ namespace Job_Tracker_Api.Controllers
         }
 
         [HttpPost("/Application/{id}")]
-        public async Task<ActionResult<ApplicationReturnDTO>> addApplication(ApplicationDTO applicationDTO, int id)
+        public async Task<ActionResult<ApplicationReturnDTO>> addApplication(ApplicationDTO applicationDTO, string id)
         {
             return await applicationService.addApplication(applicationDTO, id);
         }
 
         [HttpPatch("/Application/{id}")]
-        public async Task<ActionResult<ApplicationReturnDTO>> editApplication(ApplicationDTO applicationDTO, int id)
+        public async Task<ActionResult<ApplicationReturnDTO>> editApplication(ApplicationDTO applicationDTO, string id)
         {
             return await applicationService.editApplication(applicationDTO, id);
         }
 
         [HttpDelete("/Application/{id}")]
-        public async Task<ActionResult<ApplicationReturnDTO>> deleteApplication(int id)
+        public async Task<ActionResult<ApplicationReturnDTO>> deleteApplication(string id)
         {
             return await applicationService.deleteApplication(id);
         }

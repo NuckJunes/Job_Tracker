@@ -7,8 +7,8 @@ namespace Job_Tracker_Api.Controllers.Repositories
     public interface IApplicationRepository
     {
         Task<ActionResult<Application>> addApplication(Application newApp);
-        Task<ActionResult<Application>> deleteApplication(int id);
-        Task<ActionResult<Application>> getAppById(int id);
+        Task<ActionResult<Application>> deleteApplication(string id);
+        Task<ActionResult<Application>> getAppById(string id);
         Task<ActionResult<Application>> updateApplication(Application value);
     }
 }
