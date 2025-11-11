@@ -10,11 +10,10 @@ namespace Job_Tracker_Api.Model.Entities
         public List<Application> Applications { get; set; }
         public bool IsDeleted { get; set; }
 
-        public void convertAccountDTOtoUser(AccountDTO accountDTO, string hashedPass)
+        public void convertAccountDTOtoUser(AccountDTO accountDTO)
         {
             this.Applications = new List<Application>();
-            this.UserName = accountDTO.Username;
-            this.PasswordHash = hashedPass;
+            this.UserName = accountDTO.UserName;
             this.IsDeleted = false;
             this.Email = accountDTO.Email;
         }

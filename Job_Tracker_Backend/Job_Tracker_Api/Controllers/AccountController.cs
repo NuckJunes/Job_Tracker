@@ -1,6 +1,7 @@
 using Job_Tracker_Api.Model.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Job_Tracker_Api.Controllers.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace Job_Tracker_Api.Controllers
 {
@@ -27,7 +28,7 @@ namespace Job_Tracker_Api.Controllers
         }
 
         [HttpPost("/CreateAccount")]
-        public async Task<string> CreateAccount(AccountDTO accountDTO)
+        public async Task<IdentityResult> CreateAccount(AccountDTO accountDTO)
         {
             return await this.accountService.CreateAccount(accountDTO);
         }

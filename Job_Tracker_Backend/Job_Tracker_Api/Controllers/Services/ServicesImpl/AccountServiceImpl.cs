@@ -20,22 +20,12 @@ namespace Job_Tracker_Api.Controllers.Services.ServicesImpl
             this.passwordHasher = passwordHasher;
         }
 
-        public async Task<string> CreateAccount(AccountDTO accountDTO)
+        public async Task<IdentityResult> CreateAccount(AccountDTO accountDTO)
         {
             //Check if the account email/username already exists, if so, return
             User newUser = new User();
-            newUser.convertAccountDTOtoUser(accountDTO, SaltAndHash(accountDTO.Password, newUser));
-            ActionResult<string> createResult = await accountRepository.createAccount(newUser);
-            if(createResult.Value == "Email")
-            {
-                return "Email already in use!";
-            } else if(createResult.Value == "Username")
-            {
-                return "Username already in use!";
-            } else
-            {
-                return "Success!";
-            }            
+            newUser.convertAccountDTOtoUser(accountDTO);
+            return await accountRepository.createAccount(newUser, accountDTO.Password);            
         }
 
         public async Task<ActionResult<List<ApplicationReturnDTO>>> Login(AccountDTO accountDTO)
@@ -45,9 +35,9 @@ namespace Job_Tracker_Api.Controllers.Services.ServicesImpl
                 accountDTO.Email = "";
             }
 
-            if (accountDTO.Username == null) //If I decide to not require username to login
+            if (accountDTO.UserName == null) //If I decide to not require username to login
             {
-                accountDTO.Username = "";
+                accountDTO.UserName = "";
             }
             
             ActionResult<User> result = await accountRepository.getUser(accountDTO);
